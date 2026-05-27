@@ -1,0 +1,307 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════
+   TAILWIND V4 CLASS-BASED DARK MODE VARIANT SUPPORT
+   Overrides default media query behavior to honor our manual toggle.
+   ═══════════════════════════════════════════════════════════════ */
+@variant dark (&:where(.dark, .dark *));
+
+/* ═══════════════════════════════════════════════════════════════
+   ADAPTIVE DESIGN TOKENS
+   Surface hierarchy: Base → Surface → Elevated → Overlay → Glass
+   Dark mode is the default. Light mode overrides follow.
+   ═══════════════════════════════════════════════════════════════ */
+
+html,
+html.dark {
+  /* ── Background surfaces ────────────────────────────────────── */
+  --bg-base:      #080c10;     /* Deeper, warmer graphite-navy base     */
+  --bg-surface:   #05080b;     /* Deepest card/input bodies             */
+  --bg-elevated:  #0c1015;     /* Terminal chrome, panel headers        */
+  --bg-overlay:   #121820;     /* Active tabs, elevated containers      */
+
+  /* ── Text hierarchy ─────────────────────────────────────────── */
+  --text-primary:   #dce0de;   /* Softer-than-white headings & text     */
+  --text-secondary: rgba(220, 224, 222, 0.65);
+  --text-tertiary:  rgba(220, 224, 222, 0.40);
+
+  /* ── Accent (brand teal - slightly darker for premium contrast) ─ */
+  --accent-primary: #00bfa5;   /* Richer, slightly darker premium teal  */
+  --accent-muted:   #00a8cc;   
+  --accent-deep:    #02201d;   
+  --accent-border:  rgba(0, 191, 165, 0.14);
+
+  /* ── Glass surfaces (highly frosted macOS-style glass effect) ─── */
+  --glass-bg:           rgba(12, 18, 24, 0.45);   /* Lower opacity for high transparency */
+  --glass-bg-strong:    rgba(8, 12, 16, 0.68);    /* FROSTED glass cards */
+  --glass-nav:          rgba(10, 16, 22, 0.42);   
+  --glass-nav-scrolled: rgba(8, 12, 16, 0.65);    
+  --glass-border:       rgba(0, 191, 165, 0.12);  /* Slightly glowing border stroke      */
+  --glass-border-strong:rgba(0, 191, 165, 0.22);  /* Stronger accent border              */
+
+  /* ── Ambient glow ───────────────────────────────────────────── */
+  --ambient-glow-1: rgba(0, 191, 165, 0.035);
+  --ambient-glow-2: rgba(0, 168, 204, 0.022);
+  --aurora-opacity:  0.8;
+
+  /* ── Input / Form ───────────────────────────────────────────── */
+  --input-bg:      rgba(5, 8, 11, 0.8);
+  --autofill-bg:   #121820;
+
+  /* ── Scrollbar ──────────────────────────────────────────────── */
+  --scrollbar-track: #080c10;
+  --scrollbar-thumb: rgba(0, 191, 165, 0.12);
+
+  /* ── Misc ───────────────────────────────────────────────────── */
+  --dot-grid-color: rgba(0, 191, 165, 0.035);
+  --dot-grid-fine:  rgba(0, 191, 165, 0.025);
+  --selection-bg:   rgba(0, 191, 165, 0.20);
+  --selection-color: #00bfa5;
+
+  color-scheme: dark;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LIGHT MODE — Apple / Linear / Arc Browser aesthetic
+   ═══════════════════════════════════════════════════════════════ */
+
+html.light {
+  /* ── Background surfaces ────────────────────────────────────── */
+  --bg-base:      #f1f3f6;     /* Clean, ultra-premium soft grey (Linear-inspired) */
+  --bg-surface:   #ffffff;     /* Card bodies — pure white elevation               */
+  --bg-elevated:  #f7f8fa;     /* Panel headers, secondary surfaces                */
+  --bg-overlay:   #ebedf0;     /* Active tabs, elevated containers                 */
+
+  /* ── Text hierarchy ─────────────────────────────────────────── */
+  --text-primary:   #0f172a;   /* Perfect deep charcoal-slate headings & text      */
+  --text-secondary: rgba(15, 23, 42, 0.70); /* Rich secondary body contrast        */
+  --text-tertiary:  rgba(15, 23, 42, 0.45); /* Highly readable metadata            */
+
+  /* ── Accent (brand teal — darkened for contrast) ────────────── */
+  --accent-primary: #008272;   /* Punchy, high-contrast jade teal                  */
+  --accent-muted:   #0284c7;   
+  --accent-deep:    #e6faf6;   
+  --accent-border:  rgba(0, 130, 114, 0.18);
+
+  /* ── Glass surfaces (premium highly-frosted Light Mode glass) ── */
+  --glass-bg:           rgba(255, 255, 255, 0.65); /* More substantial frosted look  */
+  --glass-bg-strong:    rgba(255, 255, 255, 0.85);
+  --glass-nav:          rgba(255, 255, 255, 0.60);
+  --glass-nav-scrolled: rgba(255, 255, 255, 0.82);
+  --glass-border:       rgba(15, 23, 42, 0.07);    /* Sharp, ultra-fine slate border  */
+  --glass-border-strong:rgba(15, 23, 42, 0.12);    /* More defined edge stroke        */
+
+  /* ── Ambient glow ───────────────────────────────────────────── */
+  --ambient-glow-1: rgba(0, 130, 114, 0.02);
+  --ambient-glow-2: rgba(2, 132, 199, 0.015);
+  --aurora-opacity:  0.18;      /* Extremely soft watercolor effect                 */
+
+  /* ── Input / Form ───────────────────────────────────────────── */
+  --input-bg:      rgba(255, 255, 255, 0.95);
+  --autofill-bg:   #f7f8fa;
+
+  /* ── Scrollbar ──────────────────────────────────────────────── */
+  --scrollbar-track: #f1f3f6;
+  --scrollbar-thumb: rgba(0, 130, 114, 0.15);
+
+  /* ── Misc ───────────────────────────────────────────────────── */
+  --dot-grid-color: rgba(15, 23, 42, 0.045);   /* Clean, blueprint-style slate grid */
+  --dot-grid-fine:  rgba(15, 23, 42, 0.03);
+  --selection-bg:   rgba(0, 130, 114, 0.12);
+  --selection-color: #008272;
+
+  color-scheme: light;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TAILWIND V4 — @theme token mapping
+   All tokens now resolve through CSS custom properties so they
+   automatically adapt when the .light / .dark class toggles.
+   ═══════════════════════════════════════════════════════════════ */
+
+@theme {
+  --color-background: var(--bg-base);
+  --color-foreground: var(--text-primary);
+
+  --color-obsidian-950: var(--bg-surface);
+  --color-obsidian-900: var(--bg-elevated);
+  --color-obsidian-800: var(--bg-overlay);
+  --color-obsidian-700: #1c252d;
+
+  --color-emerald-accent: var(--accent-primary);
+  --color-emerald-dim:    var(--accent-muted);
+  --color-emerald-deep:   var(--accent-deep);
+  --color-emerald-border: var(--accent-border);
+
+  --color-glass-bg:            var(--glass-bg);
+  --color-glass-bg-strong:     var(--glass-bg-strong);
+  --color-glass-border:        var(--glass-border);
+  --color-glass-border-strong:  var(--glass-border-strong);
+
+  /* Override Tailwind's built-in "white" → adaptive heading/text color.
+     Safe because this project never uses bg-white. */
+  --color-white: var(--text-primary);
+
+  --font-sans:      "Inter", system-ui, -apple-system, sans-serif;
+  --font-technical: "JetBrains Mono", monospace;
+
+  --animate-pulse-slow: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-scanline:   scanline 8s linear infinite;
+  --animate-glow:       glow 2s ease-in-out infinite alternate;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   KEYFRAME ANIMATIONS
+   ═══════════════════════════════════════════════════════════════ */
+
+@keyframes scanline {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes glow {
+  0%   { text-shadow: 0 0 5px rgba(0, 191, 165, 0.2); }
+  100% { text-shadow: 0 0 20px rgba(0, 191, 165, 0.6); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BASE STYLES
+   ═══════════════════════════════════════════════════════════════ */
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ambient background glow — premium, barely-perceptible lighting */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 90% 70% at 15% 35%, var(--ambient-glow-1), transparent),
+    radial-gradient(ellipse 70% 80% at 85% 65%, var(--ambient-glow-2), transparent);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SMOOTH THEME TRANSITIONS
+   Only active while the toggle animates (added/removed by JS).
+   ═══════════════════════════════════════════════════════════════ */
+
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition:
+    background-color 0.35s ease,
+    color 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    fill 0.35s ease,
+    stroke 0.35s ease !important;
+  transition-delay: 0s !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PREMIUM SCROLLBAR
+   ═══════════════════════════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DOT GRID BACKGROUND PATTERNS
+   ═══════════════════════════════════════════════════════════════ */
+
+.bg-dot-grid {
+  background-image: radial-gradient(var(--dot-grid-color) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.bg-dot-grid-fine {
+  background-image: radial-gradient(var(--dot-grid-fine) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GLASSMORPHISM UTILITIES
+   Soft blur · low transparency · soft borders · low elevation
+   ═══════════════════════════════════════════════════════════════ */
+
+.glass-glow {
+  background: radial-gradient(
+    800px circle at var(--x, 0) var(--y, 0),
+    rgba(0, 191, 165, 0.04),
+    transparent 40%
+  );
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+}
+
+.glass-nav {
+  background: var(--glass-nav);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   AURORA SVG OPACITY (controlled by theme via CSS variable)
+   ═══════════════════════════════════════════════════════════════ */
+
+.aurora-glow {
+  opacity: var(--aurora-opacity);
+  transition: opacity 0.5s ease;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SELECTION HIGHLIGHT
+   ═══════════════════════════════════════════════════════════════ */
+
+::selection {
+  background: var(--selection-bg);
+  color: var(--selection-color);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   AUTOFILL OVERRIDE
+   ═══════════════════════════════════════════════════════════════ */
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text-primary);
+  -webkit-box-shadow: 0 0 0px 1000px var(--autofill-bg) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
