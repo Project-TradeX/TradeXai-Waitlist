@@ -72,3 +72,33 @@ Thumbs.db
 tmp/
 temp/
 .cache/
+
+# Python
+venv/
+.venv/
+env/
+
+# Node
+node_modules/
+
+# Build
+dist/
+build/
+
+# Environment
+.env*
+
+# Cache
+__pycache__/
+*.pyc
+
+# Next.js
+.next/
+out/
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
