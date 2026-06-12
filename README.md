@@ -77,3 +77,11 @@ This codebase is ready for zero-overhead, highly optimized deployment on Vercel:
    - `NEXT_PUBLIC_POSTHOG_KEY` and `NEXT_PUBLIC_POSTHOG_HOST` (From PostHog)
    - `NEXT_PUBLIC_APP_URL` (Set to your live production domain, e.g., `https://tradex.ai`)
 3. Click **Deploy**. Vercel will automatically compile TypeScript, build optimal Static and Serverless routes, and deploy to their global Edge network.
+
+---
+
+## 📈 Real-Time Web Analytics
+
+We have integrated `@vercel/analytics` for tracking page views, visitors, and performance metrics out of the box in production.
+- **Client component**: `<Analytics />` is integrated into the root layout (`app/layout.tsx`).
+- **Data collection**: Automatically begins tracking once deployed to Vercel and visited by users.
