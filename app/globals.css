@@ -15,48 +15,48 @@
 html,
 html.dark {
   /* ── Background surfaces ────────────────────────────────────── */
-  --bg-base:      #080c10;     /* Deeper, warmer graphite-navy base     */
-  --bg-surface:   #05080b;     /* Deepest card/input bodies             */
-  --bg-elevated:  #0c1015;     /* Terminal chrome, panel headers        */
-  --bg-overlay:   #121820;     /* Active tabs, elevated containers      */
+  --bg-base:      #05070A;     /* Deeper, warmer graphite-navy base     */
+  --bg-surface:   #0A0F1A;     /* Deepest card/input bodies             */
+  --bg-elevated:  #101827;     /* Terminal chrome, panel headers        */
+  --bg-overlay:   #1E293B;     /* Active tabs, elevated containers      */
 
   /* ── Text hierarchy ─────────────────────────────────────────── */
-  --text-primary:   #dce0de;   /* Softer-than-white headings & text     */
-  --text-secondary: rgba(220, 224, 222, 0.65);
-  --text-tertiary:  rgba(220, 224, 222, 0.40);
+  --text-primary:   #F8FAFC;   /* Softer-than-white headings & text     */
+  --text-secondary: rgba(248, 250, 252, 0.65);
+  --text-tertiary:  rgba(248, 250, 252, 0.40);
 
-  /* ── Accent (brand teal - slightly darker for premium contrast) ─ */
-  --accent-primary: #00bfa5;   /* Richer, slightly darker premium teal  */
-  --accent-muted:   #00a8cc;   
-  --accent-deep:    #02201d;   
-  --accent-border:  rgba(0, 191, 165, 0.14);
+  /* ── Accent (brand blue - fintech premium) ──────────────────── */
+  --accent-primary: #2563EB;   
+  --accent-muted:   #3B82F6;   
+  --accent-deep:    #1E3A8A;   
+  --accent-border:  rgba(37, 99, 235, 0.14);
 
   /* ── Glass surfaces (highly frosted macOS-style glass effect) ─── */
-  --glass-bg:           rgba(12, 18, 24, 0.45);   /* Lower opacity for high transparency */
-  --glass-bg-strong:    rgba(8, 12, 16, 0.68);    /* FROSTED glass cards */
-  --glass-nav:          rgba(10, 16, 22, 0.42);   
-  --glass-nav-scrolled: rgba(8, 12, 16, 0.65);    
-  --glass-border:       rgba(0, 191, 165, 0.12);  /* Slightly glowing border stroke      */
-  --glass-border-strong:rgba(0, 191, 165, 0.22);  /* Stronger accent border              */
+  --glass-bg:           rgba(10, 15, 26, 0.45);   
+  --glass-bg-strong:    rgba(5, 7, 10, 0.68);    
+  --glass-nav:          rgba(5, 7, 10, 0.42);   
+  --glass-nav-scrolled: rgba(5, 7, 10, 0.65);    
+  --glass-border:       rgba(255, 255, 255, 0.06);  
+  --glass-border-strong:rgba(255, 255, 255, 0.12);  
 
   /* ── Ambient glow ───────────────────────────────────────────── */
-  --ambient-glow-1: rgba(0, 191, 165, 0.035);
-  --ambient-glow-2: rgba(0, 168, 204, 0.022);
-  --aurora-opacity:  0.8;
+  --ambient-glow-1: rgba(37, 99, 235, 0.03);
+  --ambient-glow-2: rgba(59, 130, 246, 0.02);
+  --aurora-opacity:  0.3; /* Reduced excessive glow */
 
   /* ── Input / Form ───────────────────────────────────────────── */
-  --input-bg:      rgba(5, 8, 11, 0.8);
-  --autofill-bg:   #121820;
+  --input-bg:      rgba(10, 15, 26, 0.8);
+  --autofill-bg:   #101827;
 
   /* ── Scrollbar ──────────────────────────────────────────────── */
-  --scrollbar-track: #080c10;
-  --scrollbar-thumb: rgba(0, 191, 165, 0.12);
+  --scrollbar-track: #05070A;
+  --scrollbar-thumb: rgba(255, 255, 255, 0.12);
 
   /* ── Misc ───────────────────────────────────────────────────── */
-  --dot-grid-color: rgba(0, 191, 165, 0.035);
-  --dot-grid-fine:  rgba(0, 191, 165, 0.025);
-  --selection-bg:   rgba(0, 191, 165, 0.20);
-  --selection-color: #00bfa5;
+  --dot-grid-color: rgba(255, 255, 255, 0.03);
+  --dot-grid-fine:  rgba(255, 255, 255, 0.015);
+  --selection-bg:   rgba(37, 99, 235, 0.20);
+  --selection-color: #3B82F6;
 
   color-scheme: dark;
 }
@@ -77,11 +77,11 @@ html.light {
   --text-secondary: rgba(15, 23, 42, 0.70); /* Rich secondary body contrast        */
   --text-tertiary:  rgba(15, 23, 42, 0.45); /* Highly readable metadata            */
 
-  /* ── Accent (brand teal — darkened for contrast) ────────────── */
-  --accent-primary: #008272;   /* Punchy, high-contrast jade teal                  */
-  --accent-muted:   #0284c7;   
-  --accent-deep:    #e6faf6;   
-  --accent-border:  rgba(0, 130, 114, 0.18);
+  /* ── Accent (brand blue — premium fintech) ──────────────────── */
+  --accent-primary: #2563EB;   /* Punchy, high-contrast brand blue                 */
+  --accent-muted:   #3B82F6;   
+  --accent-deep:    #EFF6FF;   
+  --accent-border:  rgba(37, 99, 235, 0.15);
 
   /* ── Glass surfaces (premium highly-frosted Light Mode glass) ── */
   --glass-bg:           rgba(255, 255, 255, 0.65); /* More substantial frosted look  */
@@ -92,8 +92,8 @@ html.light {
   --glass-border-strong:rgba(15, 23, 42, 0.12);    /* More defined edge stroke        */
 
   /* ── Ambient glow ───────────────────────────────────────────── */
-  --ambient-glow-1: rgba(0, 130, 114, 0.02);
-  --ambient-glow-2: rgba(2, 132, 199, 0.015);
+  --ambient-glow-1: rgba(37, 99, 235, 0.02);
+  --ambient-glow-2: rgba(59, 130, 246, 0.015);
   --aurora-opacity:  0.18;      /* Extremely soft watercolor effect                 */
 
   /* ── Input / Form ───────────────────────────────────────────── */
@@ -102,13 +102,13 @@ html.light {
 
   /* ── Scrollbar ──────────────────────────────────────────────── */
   --scrollbar-track: #f1f3f6;
-  --scrollbar-thumb: rgba(0, 130, 114, 0.15);
+  --scrollbar-thumb: rgba(37, 99, 235, 0.15);
 
   /* ── Misc ───────────────────────────────────────────────────── */
   --dot-grid-color: rgba(15, 23, 42, 0.045);   /* Clean, blueprint-style slate grid */
   --dot-grid-fine:  rgba(15, 23, 42, 0.03);
-  --selection-bg:   rgba(0, 130, 114, 0.12);
-  --selection-color: #008272;
+  --selection-bg:   rgba(37, 99, 235, 0.12);
+  --selection-color: #2563EB;
 
   color-scheme: light;
 }
@@ -142,8 +142,10 @@ html.light {
      Safe because this project never uses bg-white. */
   --color-white: var(--text-primary);
 
-  --font-sans:      "Inter", system-ui, -apple-system, sans-serif;
-  --font-technical: "JetBrains Mono", monospace;
+  --font-sans:      "Trebuchet MS", var(--font-inter), sans-serif;
+  --font-display:   "Euclid Circular B", var(--font-inter), sans-serif;
+  --font-ui:        var(--font-inter), system-ui, -apple-system, sans-serif;
+  --font-mono:      var(--font-mono-raw), monospace;
 
   --animate-pulse-slow: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-scanline:   scanline 8s linear infinite;
@@ -160,8 +162,43 @@ html.light {
 }
 
 @keyframes glow {
-  0%   { text-shadow: 0 0 5px rgba(0, 191, 165, 0.2); }
-  100% { text-shadow: 0 0 20px rgba(0, 191, 165, 0.6); }
+  0%   { text-shadow: 0 0 5px rgba(37, 99, 235, 0.2); }
+  100% { text-shadow: 0 0 20px rgba(37, 99, 235, 0.6); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes border-glow-pulse {
+  0%, 100% { box-shadow: 0 0 0px rgba(37, 99, 235, 0); }
+  50%       { box-shadow: 0 0 18px rgba(37, 99, 235, 0.18); }
+}
+
+@keyframes gradient-x {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -253,7 +290,7 @@ html.theme-transition *::after {
 .glass-glow {
   background: radial-gradient(
     800px circle at var(--x, 0) var(--y, 0),
-    rgba(0, 191, 165, 0.04),
+    rgba(37, 99, 235, 0.04),
     transparent 40%
   );
 }
@@ -271,6 +308,73 @@ html.theme-transition *::after {
   backdrop-filter: blur(28px) saturate(190%);
   -webkit-backdrop-filter: blur(28px) saturate(190%);
   border-bottom: 1px solid var(--glass-border);
+}
+
+/* ── Subtle glass panel — used for section backgrounds ───── */
+.glass-panel {
+  background: rgba(10, 15, 26, 0.35);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ── Shimmer gradient text ──────────────────────────────── */
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(248, 250, 252, 0.9) 0%,
+    rgba(59, 130, 246, 0.9) 40%,
+    rgba(248, 250, 252, 0.9) 80%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+}
+
+/* ── Float animation ─────────────────────────────────────── */
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* ── Fade-up on scroll (applied via JS/framer or CSS class) ── */
+.animate-fade-up {
+  animation: fade-up 0.6s ease-out both;
+}
+
+/* ── Border pulse glow ───────────────────────────────────── */
+.animate-border-glow {
+  animation: border-glow-pulse 3s ease-in-out infinite;
+}
+
+/* ── Gradient shifting background ───────────────────────── */
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 6s ease infinite;
+}
+
+/* ── Hover lift — replaces ad-hoc hover:translate-y patterns ── */
+.hover-lift {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Subtle inset highlight on interactive cards ─────────── */
+.card-inset-highlight {
+  position: relative;
+  overflow: hidden;
+}
+.card-inset-highlight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.025) 0%, transparent 60%);
+  pointer-events: none;
+  border-radius: inherit;
 }
 
 /* ═══════════════════════════════════════════════════════════════

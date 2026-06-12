@@ -50,12 +50,12 @@ export async function POST(request: Request) {
             Authorization: `Bearer ${resendApiKey}`,
           },
           body: JSON.stringify({
-            from: "TradeX Labs <founders@tradex.ai>",
+            from: "TradeXai Labs <founders@tradex.ai>",
             to: [email.toLowerCase()],
-            subject: "Welcome to the TradeX Founding Waitlist",
+            subject: "Welcome to the TradeXai Founding Waitlist",
             html: `
               <div style="font-family: sans-serif; background-color: #030605; color: #ecefed; padding: 40px; border-radius: 12px; max-width: 600px; margin: 0 auto;">
-                <h1 style="color: #00f5c4; font-size: 24px; margin-bottom: 20px;">Welcome to TradeX.</h1>
+                <h1 style="color: #00f5c4; font-size: 24px; margin-bottom: 20px;">Welcome to TradeXai.</h1>
                 <p style="font-size: 14px; line-height: 1.6; color: rgba(236,239,237,0.85);">We have successfully queued your application for the Founding Waitlist.</p>
                 <p style="font-size: 14px; line-height: 1.6; color: rgba(236,239,237,0.85);">Your unique referral code is: <strong>${result.referral_code}</strong></p>
                 <p style="font-size: 14px; line-height: 1.6; color: rgba(236,239,237,0.85);">To fast-track your batch approval status, invite friends using your unique referral link:</p>

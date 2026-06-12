@@ -8,7 +8,7 @@ export const WaitlistSchema = z.object({
   }),
   challenge: z.string().min(3, "Please detail your biggest decision challenge (min 3 characters)."),
   tools: z.string().min(1, "Please tell us what tools you currently use."),
-  expectation: z.string().min(3, "Please let us know what would make TradeX valuable (min 3 characters)."),
+  expectation: z.string().min(3, "Please let us know what would make TradeXai valuable (min 3 characters)."),
   referredBy: z.string().optional().nullable(),
   joinNewsletter: z.boolean(),
 });

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import "@/instrumentation-client";
 
 // Extend window interface for optional client-side tracking engines
 declare global {

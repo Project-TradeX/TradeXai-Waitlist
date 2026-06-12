@@ -41,10 +41,10 @@ export default function Hero() {
     window.addEventListener("resize", resize);
 
     const nodes = [
-      { label: "DECISION",  xP: 0.12, yP: 0.30, pulse: 0, hover: 0, spd: 0.12 },
-      { label: "BEHAVIOR",  xP: 0.38, yP: 0.52, pulse: 0, hover: 0, spd: 0.09 },
-      { label: "PATTERN",   xP: 0.62, yP: 0.34, pulse: 0, hover: 0, spd: 0.14 },
-      { label: "INSIGHT",   xP: 0.86, yP: 0.62, pulse: 0, hover: 0, spd: 0.08 },
+      { label: "DECISION INTELLIGENCE",  xP: 0.12, yP: 0.30, pulse: 0, hover: 0, spd: 0.12 },
+      { label: "PSYCHOLOGY AUDIT",       xP: 0.38, yP: 0.52, pulse: 0, hover: 0, spd: 0.09 },
+      { label: "SYSTEMIC RISK",          xP: 0.62, yP: 0.34, pulse: 0, hover: 0, spd: 0.14 },
+      { label: "TACTICAL EDGE",          xP: 0.86, yP: 0.62, pulse: 0, hover: 0, spd: 0.08 },
     ];
 
     const particles: { x: number; y: number; spd: number; len: number; op: number }[] = [];
@@ -139,14 +139,19 @@ export default function Hero() {
         ctx.fillStyle = n.hover > 0.05
           ? (isLight ? "#008a78" : "#00bfa5")
           : (isLight ? "rgba(26, 31, 38, 0.8)" : "rgba(236, 239, 237, 0.8)");
-        ctx.font = `bold 9px JetBrains Mono, monospace`;
+        ctx.font = `bold 9px Inter, sans-serif`;
         ctx.textAlign = "center";
         ctx.fillText(n.label, n.px, n.py + r + 16);
         // Sub label on hover
         if (n.hover > 0.05) {
           ctx.fillStyle = isLight ? "rgba(0, 138, 120, 0.7)" : "rgba(0, 191, 165, 0.6)";
           ctx.font = "8px Inter, sans-serif";
-          const subs: Record<string, string> = { DECISION: "Entry Point", BEHAVIOR: "Emotional Drift", PATTERN: "Cognitive Bias", INSIGHT: "Intentional Edge" };
+          const subs: Record<string, string> = {
+            "DECISION INTELLIGENCE": "Sizing & Rules Check",
+            "PSYCHOLOGY AUDIT": "Isolate Emotional Drift",
+            "SYSTEMIC RISK": "Pre-Trade Auditing",
+            "TACTICAL EDGE": "Intentional Execution"
+          };
           ctx.fillText(subs[n.label] ?? "", n.px, n.py + r + 28);
         }
       });
@@ -186,7 +191,7 @@ export default function Hero() {
     <section id="hero" className="relative w-full min-h-screen flex flex-col overflow-hidden">
 
       {/* ── TOP ROW ── exact layout from reference image */}
-      <div className="relative z-10 flex-1 flex flex-col justify-center max-w-7xl mx-auto w-full px-6 md:px-10 pt-32 pb-10">
+      <div className="relative z-10 flex-1 flex flex-col justify-center max-w-7xl mx-auto w-full px-4 md:px-6 pt-32 pb-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-start">
 
           {/* LEFT: badge + headline */}
@@ -196,11 +201,11 @@ export default function Hero() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 self-start px-3.5 py-1.5 rounded-full border border-emerald-border bg-emerald-border/5 backdrop-blur-md"
+              className="inline-flex items-center gap-2 self-start px-3.5 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.08]/5 backdrop-blur-md font-ui"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-accent animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-accent-primary animate-pulse" />
               <span className="text-[11px] font-semibold text-foreground/80 tracking-widest uppercase">
-                Founding Waitlist Open
+                FOUNDING PRIVATE PREVIEW
               </span>
             </motion.div>
 
@@ -209,24 +214,23 @@ export default function Hero() {
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.08 }}
-              className="text-[clamp(2.6rem,6vw,4.6rem)] font-extrabold leading-[1.05] tracking-tight text-foreground"
+              className="text-[clamp(2.6rem,6vw,4.6rem)] font-extrabold leading-[1.05] tracking-tight text-foreground font-display"
             >
               Make Better<br />
               Market{" "}
-              <span className="text-emerald-accent">Decisions.</span>
+              <span className="text-shimmer">Decisions.</span>
             </motion.h1>
           </div>
 
           {/* RIGHT: description + CTA buttons — exactly like reference layout */}
-          <div className="lg:col-span-5 flex flex-col gap-5 lg:pt-10">
+          <div className="lg:col-span-5 flex flex-col gap-5 lg:pt-10 font-sans">
             <motion.p
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.12 }}
               className="text-[15px] text-foreground/65 leading-relaxed max-w-sm"
             >
-              AI-assisted behavioral intelligence for modern traders and intentional
-              market participants. Reduce noise, audit patterns, build discipline.
+              Decision intelligence and behavioral control for high-conviction traders and private funds. Consolidate your workflows, eliminate cognitive bias, and trade with absolute clarity.
             </motion.p>
 
             {/* Dual CTAs — reference style: one solid teal, one dark bordered */}
@@ -234,23 +238,31 @@ export default function Hero() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="flex items-center gap-3 flex-wrap"
+              className="flex items-center gap-3 flex-wrap font-ui"
             >
-              <button
+              <motion.button
                 onClick={() => scrollTo("waitlist", "Join Early Access")}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-emerald-accent text-black font-semibold text-[13px] hover:bg-emerald-accent/90 hover:shadow-[0_0_24px_rgba(0,191,165,0.35)] transition-all duration-300 cursor-pointer"
+                whileHover={{ scale: 1.04, boxShadow: "0 0 28px rgba(37,99,235,0.4)" }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-accent-primary text-white font-semibold text-[13px] hover:bg-accent-primary/90 transition-colors duration-300 cursor-pointer"
               >
                 Join Early Access
-                <ArrowUpRight className="w-4 h-4" />
-              </button>
+                <motion.span animate={{ x: [0, 3, 0] }} transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}>
+                  <ArrowUpRight className="w-4 h-4" />
+                </motion.span>
+              </motion.button>
 
-              <button
+              <motion.button
                 onClick={() => scrollTo("why-tradex", "See Our Vision")}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-lg border border-glass-border-strong bg-foreground/5 text-foreground/85 font-semibold text-[13px] hover:border-emerald-accent/30 hover:text-foreground transition-all duration-300 cursor-pointer backdrop-blur-sm"
+                whileHover={{ scale: 1.03, borderColor: "rgba(37,99,235,0.4)" }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/[0.08] bg-foreground/5 text-foreground/85 font-semibold text-[13px] hover:text-foreground transition-all duration-300 cursor-pointer backdrop-blur-sm"
               >
                 See Our Vision
                 <ArrowRight className="w-4 h-4" />
-              </button>
+              </motion.button>
             </motion.div>
           </div>
         </div>
@@ -260,146 +272,155 @@ export default function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, delay: 0.35 }}
-          className="mt-10 w-full rounded-xl overflow-hidden border border-glass-border-strong bg-glass-bg shadow-[0_24px_80px_rgba(0,0,0,0.15)] dark:shadow-[0_24px_80px_rgba(0,0,0,0.6)]"
+          className="mt-10 w-full rounded-xl overflow-hidden border border-white/[0.08] bg-glass-bg shadow-[0_24px_80px_rgba(0,0,0,0.15)] dark:shadow-[0_24px_80px_rgba(0,0,0,0.6)]"
           style={{
             backdropFilter: "blur(28px) saturate(190%)",
             WebkitBackdropFilter: "blur(28px) saturate(190%)",
           }}
         >
-          {/* Card top bar — mimics browser / terminal chrome */}
+          {/* Card top bar */}
           <div
-            className="flex items-center justify-between px-5 py-3.5 border-b border-glass-border bg-obsidian-900/90"
+            className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.04] bg-obsidian-900/90 font-ui"
           >
             <div className="flex items-center gap-4">
               {/* Window traffic-light dots */}
               <div className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-[rgba(239,68,68,0.4)] border border-[rgba(239,68,68,0.4)]" />
-                <div className="w-2.5 h-2.5 rounded-full bg-[rgba(234,179,8,0.4)] border border-[rgba(234,179,8,0.4)]" />
-                <div className="w-2.5 h-2.5 rounded-full bg-[rgba(0,191,165,0.35)] border border-[rgba(0,191,165,0.35)]" />
+                <div className="w-2 h-2 rounded-full bg-foreground/15 border border-foreground/10" />
+                <div className="w-2 h-2 rounded-full bg-foreground/15 border border-foreground/10" />
+                <div className="w-2 h-2 rounded-full bg-foreground/15 border border-foreground/10" />
               </div>
-              <span className="font-mono text-[10px] text-foreground/40 tracking-wider">
-                tradex / behavioral-workspace / <span className="text-emerald-accent/75">live-session</span>
+              <span className="text-[10px] text-foreground/40 tracking-wider">
+                TradeXai Workspace / <span className="text-accent-primary/75 font-semibold">Active Portfolio</span>
               </span>
             </div>
-            <div className="hidden sm:flex items-center gap-3 font-mono text-[9px] text-foreground/40">
-              <span className="px-2 py-0.5 rounded border border-glass-border-strong text-emerald-accent/75">
-                SYNCED
+            <div className="hidden sm:flex items-center gap-3 text-[9px] text-foreground/40">
+              <span className="px-2 py-0.5 rounded border border-accent-primary/20 bg-accent-primary/5 text-accent-primary/85 font-semibold">
+                SECURE TELEMETRY
               </span>
-              <span>⟨ serial, rack, risk &gt; 70 ⟩</span>
-              <span className="border-l border-foreground/10 pl-3">Filters · 2</span>
-              <span className="border-l border-foreground/10 pl-3">↓ Export</span>
+              <span className="border-l border-foreground/10 pl-3">Risk Level: Strict</span>
+              <span className="border-l border-foreground/10 pl-3">Post-Audit Output</span>
             </div>
           </div>
-
+ 
           {/* Card body — two-column layout matching reference */}
-          <div className="grid grid-cols-1 md:grid-cols-12">
+          <div className="grid grid-cols-1 md:grid-cols-12 font-sans">
             {/* Left sidebar */}
-            <div className="md:col-span-3 border-r border-glass-border p-4 hidden md:block bg-obsidian-900/30">
-              <p className="font-mono text-[9px] text-foreground/35 tracking-widest uppercase mb-2">Views</p>
+            <div className="md:col-span-3 border-r border-white/[0.04] p-4 hidden md:block bg-obsidian-900/30 font-ui">
+              <p className="text-[9px] text-foreground/35 tracking-widest uppercase mb-2">Telemetry Sections</p>
               <nav className="flex flex-col gap-0.5">
                 {[
-                  { label: "All decisions", count: "248", active: false },
-                  { label: "High conviction", count: "42", active: true },
-                  { label: "Emotional flags", count: "18", active: false },
-                  { label: "Scaling fast", count: "30", active: false },
-                  { label: "By session", count: "54", active: false },
-                  { label: "By bias type", count: "9", active: false },
+                  { label: "Execution Mirror", count: "248", active: false },
+                  { label: "Decision Clarity", count: "42", active: true },
+                  { label: "Emotional Friction", count: "18", active: false },
+                  { label: "Sizing Analytics", count: "30", active: false },
+                  { label: "Audit Sessions", count: "54", active: false },
+                  { label: "Systemic Biases", count: "9", active: false },
                 ].map(item => (
                   <div
                     key={item.label}
                     className={`flex items-center justify-between px-3 py-1.5 rounded-md text-[11px] font-medium cursor-pointer transition-all ${
                       item.active
-                        ? "bg-emerald-border text-emerald-accent font-semibold"
+                        ? "bg-white/[0.08] text-accent-primary font-semibold"
                         : "text-foreground/50 hover:text-foreground/80 hover:bg-foreground/5"
                     }`}
                   >
                     <span>{item.label}</span>
-                    <span className={`font-mono text-[10px] ${item.active ? "text-emerald-accent" : "text-foreground/30"}`}>
+                    <span className={`font-mono text-[10px] ${item.active ? "text-accent-primary" : "text-foreground/30"}`}>
                       {item.count}
                     </span>
                   </div>
                 ))}
               </nav>
-
-              <p className="font-mono text-[9px] text-foreground/35 tracking-widest uppercase mt-4 mb-2">Modules</p>
-              {["Behavioral Mirror", "Risk Workspace", "Learning Engine"].map(m => (
+ 
+              <p className="text-[9px] text-foreground/35 tracking-widest uppercase mt-4 mb-2">Analysis Tools</p>
+              {["AI Decision Mirror", "Pre-Trade Auditor", "Adaptive Risk Guard"].map(m => (
                 <div key={m} className="px-3 py-1.5 text-[11px] text-foreground/50 hover:text-foreground hover:bg-foreground/5 cursor-pointer transition-colors rounded-md">
                   {m}
                 </div>
               ))}
             </div>
-
+ 
             {/* Right main panel — stats + canvas viz */}
             <div className="md:col-span-9 flex flex-col">
               {/* Top stats row */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 border-b border-glass-border">
+              <div className="grid grid-cols-2 sm:grid-cols-4 border-b border-white/[0.04] font-ui">
                 {[
-                  { label: "SESSIONS", value: "1,248", delta: "+18 this wk" },
-                  { label: "AVG CLARITY", value: "7.8", delta: "↑ 3.2%" },
-                  { label: "BIAS EVENTS", value: "42", delta: "+0" },
-                  { label: "IMPROVEMENT", value: "88%", delta: "quarterly" },
+                  { label: "TRADES AUDITED", value: "1,248", delta: "+18 this wk" },
+                  { label: "DECISION CLARITY", value: "7.8 / 10", delta: "↑ 3.2%" },
+                  { label: "BIAS INCIDENTS", value: "42", delta: "-4 vs avg" },
+                  { label: "DISCIPLINE INDEX", value: "88%", delta: "quarterly" },
                 ].map((stat, i) => (
                   <div
                     key={stat.label}
-                    className={`p-4 ${i < 3 ? "border-r border-glass-border" : ""}`}
+                    className={`p-4 ${i < 3 ? "border-r border-white/[0.04]" : ""}`}
                   >
-                    <p className="font-mono text-[9px] text-foreground/45 tracking-widest uppercase mb-1">{stat.label}</p>
+                    <p className="text-[9px] text-foreground/45 tracking-widest uppercase mb-1">{stat.label}</p>
                     <p className="text-2xl font-bold text-foreground font-mono">{stat.value}</p>
                     <p className="text-[10px] text-foreground/40 font-mono mt-0.5">{stat.delta}</p>
                   </div>
                 ))}
               </div>
-
+ 
               {/* Canvas visualization area */}
               <div className="relative flex-1 min-h-[280px]">
                 {/* Chart label */}
-                <div className="absolute top-4 left-4 font-mono text-[10px] text-foreground/40 flex items-center gap-4 z-10">
-                  <span>BEHAVIORAL PATTERN FLOW — LIVE VISUALIZATION</span>
-                  <span className="flex items-center gap-1.5 text-emerald-accent/75">
-                    <span className="w-6 h-px bg-emerald-accent/60 inline-block" /> avg clarity
+                <div className="absolute top-4 left-4 font-ui text-[10px] text-foreground/40 flex items-center gap-4 z-10">
+                  <span>DECISION QUALITY METRICS FLOW</span>
+                  <span className="flex items-center gap-1.5 text-accent-primary/75">
+                    <span className="w-6 h-px bg-accent-primary/60 inline-block" /> clarity score
                   </span>
                   <span className="flex items-center gap-1.5 text-foreground/30">
-                    <span className="w-6 h-px bg-foreground/25 inline-block" style={{ borderStyle: "dashed" }} /> sessions &gt; 70
+                    <span className="w-6 h-px bg-foreground/25 inline-block" style={{ borderStyle: "dashed" }} /> baseline index
                   </span>
                 </div>
-
+ 
                 <canvas
                   ref={canvasRef}
                   className="absolute inset-0 w-full h-full cursor-crosshair"
                   style={{ width: "100%", height: "100%" }}
                 />
               </div>
-
+ 
               {/* Bottom data table rows */}
-              <div className="border-t border-glass-border">
-                <div className="grid grid-cols-5 px-4 py-2 font-mono text-[9px] text-foreground/35 tracking-widest uppercase border-b border-glass-border">
-                  {["PATTERN TYPE", "SESSION", "FREQ", "RISK", "ACTION"].map(h => (
+              <div className="border-t border-white/[0.04] font-ui">
+                <div className="grid grid-cols-5 px-4 py-2 text-[9px] text-foreground/35 tracking-widest uppercase border-b border-white/[0.04]">
+                  {["INCIDENT TYPE", "TIME/ID", "CONVICTION", "EXPOSURE", "STATUS"].map(h => (
                     <span key={h}>{h}</span>
                   ))}
                 </div>
                 {[
-                  { pattern: "FOMO Entry", session: "S-4860-17", freq: "+82%", risk: 72, action: "cool-down 10m" },
-                  { pattern: "Revenge Trade", session: "A-1102-09", freq: "+64%", risk: 58, action: "review logs" },
-                  { pattern: "Early Exit", session: "W5-2", freq: "+41%", risk: 54, action: "monitor" },
-                  { pattern: "Bias Override", session: "S-2210-01", freq: "+22%", risk: 38, action: "—" },
+                  { pattern: "FOMO Chase", session: "14:02:11", freq: "4.2 / 10", risk: 72, action: "Restricted" },
+                  { pattern: "Revenge Sizing", session: "10:32:05", freq: "3.5 / 10", risk: 58, action: "Flagged" },
+                  { pattern: "Pre-Target Exit", session: "09:14:50", freq: "6.8 / 10", risk: 54, action: "Monitored" },
+                  { pattern: "Rule Breach", session: "Yesterday", freq: "5.0 / 10", risk: 38, action: "Cleared" },
                 ].map((row) => (
-                  <div key={row.session} className="grid grid-cols-5 px-4 py-2.5 border-b border-glass-border/40 text-[11px] font-mono hover:bg-foreground/5 transition-colors">
+                  <div key={row.session} className="grid grid-cols-5 px-4 py-2.5 border-b border-white/[0.04]/40 text-[11px] hover:bg-foreground/5 transition-colors items-center">
                     <span className="text-foreground/80 font-semibold">{row.pattern}</span>
-                    <span className="text-foreground/40">{row.session}</span>
-                    <span className="text-emerald-accent font-semibold">{row.freq}</span>
-                    <span className="flex items-center gap-2">
+                    <span className="text-foreground/45 font-mono">{row.session}</span>
+                    <span className="text-foreground/75 font-mono">{row.freq}</span>
+                    <span className="flex items-center gap-2 font-mono">
                       <span className="h-1 w-12 rounded-full bg-foreground/10 overflow-hidden">
                         <span
                           className="h-full block rounded-full"
                           style={{
                             width: `${(row.risk / 100) * 100}%`,
-                            background: row.risk > 65 ? "rgba(239,68,68,0.7)" : "rgba(0,191,165,0.7)"
+                            background: row.risk > 65 ? "rgba(239,68,68,0.7)" : "rgba(37,99,235,0.7)"
                           }}
                         />
                       </span>
-                      <span className="text-foreground/50">{row.risk}</span>
+                      <span className="text-foreground/50">{row.risk}%</span>
                     </span>
-                    <span className="text-foreground/40">{row.action}</span>
+                    <span className={`inline-flex items-center text-[10px] font-semibold ${
+                      row.action === "Restricted"
+                        ? "text-red-400"
+                        : row.action === "Flagged"
+                        ? "text-yellow-400"
+                        : row.action === "Monitored"
+                        ? "text-blue-400"
+                        : "text-foreground/40"
+                    }`}>
+                      {row.action}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -415,14 +436,20 @@ export default function Hero() {
           className="flex flex-wrap items-center gap-6 mt-6"
         >
           {[
-            { dot: true, label: "Built in Public" },
-            { dot: true, label: "Early Community" },
-            { dot: true, label: "Research Driven" },
-          ].map(item => (
-            <div key={item.label} className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-accent/60" />
-              <span className="text-[11px] text-foreground/45 font-medium tracking-wide">{item.label}</span>
-            </div>
+            { dot: true, label: "Private Preview Cohort" },
+            { dot: true, label: "Institutional Grade" },
+            { dot: true, label: "Behavioral Finance Research" },
+          ].map((item, idx) => (
+            <motion.div
+              key={item.label}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4, delay: 0.6 + idx * 0.1 }}
+              className="flex items-center gap-2 font-ui group cursor-default"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-accent-primary/60 group-hover:bg-accent-primary group-hover:shadow-[0_0_8px_rgba(37,99,235,0.5)] transition-all duration-300" />
+              <span className="text-[11px] text-foreground/45 font-medium tracking-wide group-hover:text-foreground/70 transition-colors duration-300">{item.label}</span>
+            </motion.div>
           ))}
         </motion.div>
       </div>

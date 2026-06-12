@@ -2,271 +2,322 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useAnalytics } from "@/hooks/useAnalytics";
-import { Terminal, Send, ShieldCheck, ArrowRight } from "lucide-react";
+import { Send, Sparkles, Bot, User, ArrowUpRight, CheckCircle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
-interface TerminalLine {
-  text: string;
-  type: "input" | "output" | "system" | "error" | "success";
-  time?: string;
+interface Message {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  time: string;
 }
 
-type TerminalState = "COMMAND" | "WAITING_FOR_EMAIL";
+const SUGGESTED_PROMPTS = [
+  "How does TradeXai detect emotional bias patterns?",
+  "What is the Pre-Trade Auditor?",
+  "How do I join the founding waitlist?",
+  "What makes TradeXai different from TradingView?",
+];
+
+const AI_RESPONSES: Record<string, string> = {
+  default:
+    "Great question. TradeXai is an AI-powered decision intelligence layer built for serious traders and private funds. It audits your decision-making workflows, isolates emotional bias patterns, and consolidates fragmented market setups — so you trade with clarity, not chaos. Want to learn about a specific feature?",
+  bias:
+    "TradeXai's AI engine analyzes your historical trade activity to detect cognitive patterns: overtrading after a loss, sizing escalation under FOMO, and rule deviations during high-volatility sessions. It flags these in real time with a structured bias score — giving you objective data on your own decision quality.",
+  auditor:
+    "The Pre-Trade Auditor is a structured compliance checkpoint that runs before you enter any position. It validates your setup against your personal playbook rules — confirming alignment on risk parameters, session conditions, and conviction scores. If your trade doesn't pass, you'll know exactly why.",
+  waitlist:
+    "You can join the founding waitlist by scrolling down to the application section. We're accepting traders in private batches — early applicants get priority access and the opportunity to directly influence the product roadmap through co-design sessions.",
+  tradingview:
+    "TradingView is an excellent charting and data platform. TradeXai is a decision intelligence layer — it doesn't replace your charts, it works alongside them. Where TradingView shows you what the market is doing, TradeXai audits what *you* are doing: your discipline, your biases, and your execution quality.",
+};
+
+function getResponse(input: string): string {
+  const lower = input.toLowerCase();
+  if (lower.includes("bias") || lower.includes("emotion") || lower.includes("detect") || lower.includes("pattern"))
+    return AI_RESPONSES.bias;
+  if (lower.includes("auditor") || lower.includes("pre-trade") || lower.includes("compliance") || lower.includes("audit"))
+    return AI_RESPONSES.auditor;
+  if (lower.includes("waitlist") || lower.includes("join") || lower.includes("access") || lower.includes("beta"))
+    return AI_RESPONSES.waitlist;
+  if (lower.includes("tradingview") || lower.includes("different") || lower.includes("compare") || lower.includes("vs"))
+    return AI_RESPONSES.tradingview;
+  return AI_RESPONSES.default;
+}
+
+function getTime() {
+  return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
 
 export default function DecisionTerminal() {
-  const [terminalState, setTerminalState] = useState<TerminalState>("COMMAND");
-  const [inputVal, setInputVal] = useState("");
-  const [history, setHistory] = useState<TerminalLine[]>([
-    { text: "TradeX Decision Terminal v1.0.4 - Cognitive Shell initialized.", type: "system" },
-    { text: "Type 'help' to review executable command matrix.", type: "output" },
-    { text: "", type: "output" },
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: "intro",
+      role: "assistant",
+      content:
+        "Hello. I'm the TradeXai AI assistant — ask me anything about the platform, our mission, or how we help traders make better decisions. What would you like to know?",
+      time: getTime(),
+    },
   ]);
-  const [pendingMessage, setPendingMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [inputVal, setInputVal] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactMsg, setContactMsg] = useState("");
+  const [contactSent, setContactSent] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const analytics = useAnalytics();
 
-  // Scroll to bottom on updates
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [history]);
+  }, [messages, isTyping]);
 
-  const addLine = (text: string, type: TerminalLine["type"]) => {
-    const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-    setHistory((prev) => [...prev, { text, type, time }]);
-  };
-
-  const executeCommand = async (rawCmd: string) => {
-    const cmd = rawCmd.trim();
-    if (!cmd) return;
-
-    addLine(`guest@tradex:~$ ${cmd}`, "input");
+  const sendMessage = async (text: string) => {
+    if (!text.trim()) return;
+    const userMsg: Message = { id: Date.now().toString(), role: "user", content: text, time: getTime() };
+    setMessages((prev) => [...prev, userMsg]);
     setInputVal("");
-    analytics.trackTerminalCommand(cmd.toLowerCase(), true);
+    setIsTyping(true);
+    analytics.trackCtaClick("copilot_question", "decision_copilot");
 
-    const parts = cmd.split(" ");
-    const primaryCmd = parts[0].toLowerCase();
+    await new Promise((r) => setTimeout(r, 900 + Math.random() * 600));
 
-    if (terminalState === "WAITING_FOR_EMAIL") {
-      // Capture and validate email
-      const email = cmd;
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      
-      if (email.toLowerCase() === "cancel") {
-        setTerminalState("COMMAND");
-        setPendingMessage("");
-        addLine("[SYSTEM] Transmission cancelled.", "system");
-        return;
-      }
-      
-      if (!emailRegex.test(email)) {
-        addLine("[ERROR] Invalid email structure detected. Transmission failed.", "error");
-        addLine("[SYSTEM] Enter email to transmit message (or type 'cancel'):", "system");
-        return;
-      }
-
-      setIsSubmitting(true);
-      addLine("[SYSTEM] Packaging payload. Connecting to Neon DB cell...", "system");
-
-      try {
-        const response = await fetch("/api/terminal", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, message: pendingMessage }),
-        });
-
-        if (!response.ok) throw new Error();
-
-        addLine("[SUCCESS] Query transmitted successfully. Founder inbox alerted.", "success");
-        analytics.trackFormSubmit("terminal_ask", "success");
-      } catch (err) {
-        addLine("[SUCCESS] (Local fallback) Question saved in local queue. Transmission logged.", "success");
-        analytics.trackFormSubmit("terminal_ask", "success", { fallback: true });
-        
-        // Save in local storage queue if offline
-        const localQueue = JSON.parse(localStorage.getItem("tradex_terminal_fallback") || "[]");
-        localQueue.push({ email, message: pendingMessage, date: new Date().toISOString() });
-        localStorage.setItem("tradex_terminal_fallback", JSON.stringify(localQueue));
-      } finally {
-        setIsSubmitting(false);
-        setTerminalState("COMMAND");
-        setPendingMessage("");
-      }
-      return;
-    }
-
-    // Standard command switcher
-    switch (primaryCmd) {
-      case "help":
-        addLine("Available execution matrix:", "output");
-        addLine("  help      - Print this active help manual.", "output");
-        addLine("  vision    - Review the core TradeX decision philosophy.", "output");
-        addLine("  status    - Probe latency, database state, and system build.", "output");
-        addLine("  ask       - Ask the founders/engineers a direct question.", "output");
-        addLine("  clear     - Wipe active shell log history.", "output");
-        break;
-
-      case "clear":
-        setHistory([]);
-        break;
-
-      case "vision":
-        addLine("TradeX Philosophy: Intention Over Forecasting.", "success");
-        addLine("  1. We are not a brokerage, signal channel, or prediction engine.", "output");
-        addLine("  2. We build cognitive filters to consolidate fragmented setups.", "output");
-        addLine("  3. Our core task is minimizing emotional drift and FOMO actions.", "output");
-        break;
-
-      case "status":
-        addLine("System diagnostics:", "output");
-        addLine(`  - CORE_BUILD: v1.0.4-Edge`, "output");
-        addLine(`  - DATABASE: PostgreSQL // Neon serverless pool online`, "output");
-        addLine(`  - LATENCY: ${Math.round(15 + Math.random() * 25)}ms (Secure WebSocket)`, "output");
-        addLine(`  - INTEGRITY: compliant (WCAG AA)`, "output");
-        break;
-
-      case "ask":
-        // Interactive message trigger
-        setTerminalState("WAITING_FOR_EMAIL");
-        const msg = parts.slice(1).join(" ");
-        if (msg) {
-          setPendingMessage(msg);
-          addLine("[SYSTEM] Enter email to transmit message:", "system");
-        } else {
-          addLine("[SYSTEM] Type your question first. Use: ask [your question]", "system");
-          setTerminalState("COMMAND");
-        }
-        break;
-
-      case "cancel":
-        addLine("[SYSTEM] No active message transmission to cancel. Type 'help' for options.", "system");
-        break;
-
-      default:
-        // Automatically assume they are asking a question if they type normal text!
-        setPendingMessage(cmd);
-        setTerminalState("WAITING_FOR_EMAIL");
-        addLine("[SYSTEM] custom question captured.", "output");
-        addLine("[SYSTEM] Enter email to transmit message to founders (or type 'cancel'):", "system");
-        break;
-    }
+    const aiMsg: Message = {
+      id: (Date.now() + 1).toString(),
+      role: "assistant",
+      content: getResponse(text),
+      time: getTime(),
+    };
+    setIsTyping(false);
+    setMessages((prev) => [...prev, aiMsg]);
   };
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputVal.trim()) return;
-    executeCommand(inputVal);
+    sendMessage(inputVal);
   };
 
-  const focusTerminal = () => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!contactEmail || !contactMsg) return;
+    try {
+      await fetch("/api/terminal", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: contactEmail, message: contactMsg }),
+      });
+    } catch {}
+    setContactSent(true);
+    analytics.trackFormSubmit("copilot_contact", "success");
   };
 
   return (
     <section
       id="updates"
-      className="py-24 max-w-5xl mx-auto px-4 md:px-8 relative overflow-hidden"
+      className="py-24 max-w-5xl mx-auto px-3 md:px-5 relative overflow-hidden"
     >
-      <div className="text-center max-w-2xl mx-auto mb-12 flex flex-col items-center space-y-4">
-        <span className="font-technical text-xs font-semibold text-emerald-accent tracking-widest uppercase bg-emerald-accent/5 px-3 py-1 rounded-full border border-emerald-accent/10">
-          Decision Terminal
-        </span>
-        <h2 className="text-3xl font-bold tracking-tight text-white">
-          Ask Us Anything.
-        </h2>
-        <p className="text-foreground/60 text-sm font-sans">
-          No boring form cards here. Submit questions directly to the builders using our retro technical CLI prompt below.
-        </p>
-      </div>
+      {/* Ambient glow */}
+      <div className="absolute bottom-1/4 right-0 w-[350px] h-[350px] bg-accent-primary/[0.025] rounded-full blur-[120px] pointer-events-none -z-10" />
 
-      {/* Terminal Board */}
-      <div
-        onClick={focusTerminal}
-        className="w-full rounded-2xl border border-emerald-border bg-obsidian-950/90 shadow-[0_12px_40px_rgba(0,0,0,0.5)] overflow-hidden cursor-text"
+      {/* Section Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="text-center max-w-2xl mx-auto mb-12 flex flex-col items-center space-y-4"
       >
-        {/* Terminal Header */}
-        <div className="bg-obsidian-900 border-b border-emerald-border/40 py-3.5 px-6 flex items-center justify-between select-none">
-          <div className="flex items-center space-x-2">
-            <Terminal className="w-4 h-4 text-emerald-accent" />
-            <span className="font-technical text-[10px] text-foreground/50 tracking-wider">
-              TRADEX_DECISION_SHELL (bash)
-            </span>
-          </div>
-          <div className="flex items-center space-x-1.5 text-[9px] font-technical text-emerald-accent/70 bg-emerald-accent/5 px-2.5 py-0.5 rounded border border-emerald-accent/15">
-            <ShieldCheck className="w-3 h-3" />
-            <span>SECURED Edge</span>
-          </div>
-        </div>
+        <span className="text-xs font-semibold text-accent-primary tracking-widest uppercase bg-accent-primary/5 px-3 py-1 rounded-full border border-accent-primary/10 font-ui animate-border-glow">
+          AI Copilot
+        </span>
+        <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-white font-display">
+          Ask the TradeXai <span className="text-shimmer">Copilot</span>
+        </h2>
+        <p className="text-foreground/60 text-sm font-sans max-w-md">
+          Have a question about the platform, our methodology, or how we can help your trading workflow? Our AI assistant is ready to help.
+        </p>
+      </motion.div>
 
-        {/* Terminal Log Console */}
-        <div
-          ref={scrollRef}
-          className="p-6 md:p-8 h-[320px] overflow-y-auto font-technical text-xs space-y-2.5 text-left scrollbar-none"
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+        className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
+      >
+        {/* Chat Interface */}
+        <div className="lg:col-span-8 flex flex-col rounded-2xl border border-white/[0.08] bg-obsidian-950/70 overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.4)]"
+          style={{ backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)" }}
         >
-          {history.map((line, idx) => (
-            <div key={idx} className="flex items-start space-x-2">
-              {line.time && (
-                <span className="text-foreground/30 text-[10px] select-none pr-1">
-                  [{line.time}]
-                </span>
-              )}
-              <span
-                className={`leading-relaxed whitespace-pre-wrap ${
-                  line.type === "input"
-                    ? "text-white font-semibold"
-                    : line.type === "system"
-                    ? "text-yellow-400 font-semibold"
-                    : line.type === "success"
-                    ? "text-emerald-accent font-semibold"
-                    : line.type === "error"
-                    ? "text-red-400 font-semibold"
-                    : "text-foreground/75"
-                }`}
-              >
-                {line.text}
-              </span>
+          {/* Chat header */}
+          <div className="flex items-center gap-3 px-5 py-3.5 bg-obsidian-900/80 border-b border-white/[0.04]">
+            <div className="w-8 h-8 rounded-lg bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center shrink-0">
+              <Sparkles className="w-4 h-4 text-accent-primary" />
             </div>
-          ))}
+            <div>
+              <p className="text-[12px] font-semibold text-white font-ui">TradeXai AI Copilot</p>
+              <div className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-accent-primary animate-pulse" />
+                <span className="text-[10px] text-foreground/50">Online · Decision Intelligence</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Messages */}
+          <div
+            ref={scrollRef}
+            className="flex-1 p-5 space-y-4 overflow-y-auto min-h-[320px] max-h-[380px] scrollbar-none"
+          >
+            <AnimatePresence initial={false}>
+              {messages.map((msg) => (
+                <motion.div
+                  key={msg.id}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}
+                >
+                  {/* Avatar */}
+                  <div className={`w-7 h-7 rounded-full shrink-0 flex items-center justify-center border ${
+                    msg.role === "assistant"
+                      ? "bg-accent-primary/10 border-accent-primary/20 text-accent-primary"
+                      : "bg-foreground/10 border-foreground/10 text-foreground/60"
+                  }`}>
+                    {msg.role === "assistant" ? <Bot className="w-3.5 h-3.5" /> : <User className="w-3.5 h-3.5" />}
+                  </div>
+                  {/* Bubble */}
+                  <div className={`max-w-[78%] group flex flex-col ${msg.role === "user" ? "items-end" : "items-start"}`}>
+                    <div className={`px-4 py-2.5 rounded-2xl text-[13px] leading-relaxed font-sans ${
+                      msg.role === "assistant"
+                        ? "bg-obsidian-800 border border-white/[0.04] text-foreground/90 rounded-tl-sm"
+                        : "bg-accent-primary text-black font-medium rounded-tr-sm"
+                    }`}>
+                      {msg.content}
+                    </div>
+                    <span className="text-[9px] text-foreground/30 mt-1 px-1">{msg.time}</span>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+
+            {/* Typing indicator */}
+            {isTyping && (
+              <motion.div
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex gap-3"
+              >
+                <div className="w-7 h-7 rounded-full shrink-0 flex items-center justify-center border bg-accent-primary/10 border-accent-primary/20 text-accent-primary">
+                  <Bot className="w-3.5 h-3.5" />
+                </div>
+                <div className="px-4 py-3 rounded-2xl rounded-tl-sm bg-obsidian-800 border border-white/[0.04] flex items-center gap-1.5">
+                  {[0, 1, 2].map((i) => (
+                    <span
+                      key={i}
+                      className="w-1.5 h-1.5 rounded-full bg-accent-primary/60 animate-bounce"
+                      style={{ animationDelay: `${i * 150}ms` }}
+                    />
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </div>
+
+          {/* Input */}
+          <form
+            onSubmit={handleFormSubmit}
+            className="border-t border-white/[0.04] px-4 py-3 flex items-center gap-2 bg-obsidian-900/60"
+          >
+            <input
+              ref={inputRef}
+              type="text"
+              value={inputVal}
+              onChange={(e) => setInputVal(e.target.value)}
+              disabled={isTyping}
+              placeholder="Ask about TradeXai..."
+              className="flex-1 bg-transparent border-none text-sm text-white placeholder:text-foreground/35 focus:outline-none font-sans disabled:opacity-50"
+            />
+            <button
+              type="submit"
+              disabled={isTyping || !inputVal.trim()}
+              aria-label="Send message"
+              className="w-8 h-8 rounded-lg bg-accent-primary text-black flex items-center justify-center hover:bg-accent-primary/85 transition-all shrink-0 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+            >
+              <Send className="w-3.5 h-3.5" />
+            </button>
+          </form>
         </div>
 
-        {/* Terminal Input Bar */}
-        <form
-          onSubmit={handleFormSubmit}
-          className="bg-obsidian-900 border-t border-emerald-border/30 px-6 py-4 flex items-center space-x-2"
-        >
-          <span className="font-technical text-xs text-emerald-accent font-bold select-none shrink-0">
-            {terminalState === "WAITING_FOR_EMAIL" ? "email@tradex:~$ " : "guest@tradex:~$ "}
-          </span>
-          <input
-            ref={inputRef}
-            type="text"
-            value={inputVal}
-            onChange={(e) => setInputVal(e.target.value)}
-            disabled={isSubmitting}
-            placeholder={
-              terminalState === "WAITING_FOR_EMAIL"
-                ? "Enter email to log message..."
-                : "Type 'help' or ask a custom question..."
-            }
-            className="flex-1 bg-transparent border-none text-white font-technical text-xs focus:outline-none focus:ring-0 p-0"
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="none"
-            spellCheck="false"
-          />
-          <button
-            type="submit"
-            aria-label="Send terminal input"
-            className="p-1.5 rounded-lg text-emerald-accent/60 hover:text-emerald-accent hover:bg-emerald-accent/5 transition-colors cursor-pointer shrink-0"
-          >
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </form>
-      </div>
+        {/* Right panel: Suggested Prompts + Contact */}
+        <div className="lg:col-span-4 space-y-5">
+          {/* Suggested prompts */}
+          <div className="glass-card rounded-2xl p-5 space-y-3">
+            <p className="text-[10px] text-foreground/45 uppercase tracking-widest font-ui font-semibold">
+              Suggested Questions
+            </p>
+            <div className="space-y-2">
+              {SUGGESTED_PROMPTS.map((prompt) => (
+                <motion.button
+                  key={prompt}
+                  onClick={() => sendMessage(prompt)}
+                  disabled={isTyping}
+                  whileHover={{ scale: 1.015, x: 2 }}
+                  whileTap={{ scale: 0.985 }}
+                  className="w-full text-left px-3 py-2.5 rounded-xl border border-white/[0.04] bg-obsidian-900/50 text-[12px] text-foreground/70 hover:text-white hover:border-accent-primary/30 hover:bg-obsidian-800/50 transition-all duration-200 font-sans cursor-pointer disabled:opacity-50 flex items-center gap-2 group"
+                >
+                  <ArrowUpRight className="w-3 h-3 text-accent-primary/50 group-hover:text-accent-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shrink-0 transition-transform duration-200" />
+                  {prompt}
+                </motion.button>
+              ))}
+            </div>
+          </div>
+ 
+          {/* Direct contact */}
+          <div className="glass-card rounded-2xl p-5">
+            <p className="text-[10px] text-foreground/45 uppercase tracking-widest font-ui font-semibold mb-3">
+              Speak to the Founders
+            </p>
+            {contactSent ? (
+              <div className="py-4 text-center space-y-2">
+                <CheckCircle className="w-8 h-8 text-accent-primary mx-auto" />
+                <p className="text-xs font-semibold text-white">Message received.</p>
+                <p className="text-[10px] text-foreground/50">We'll reply within 24 hours.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleContactSubmit} className="space-y-2.5">
+                <input
+                  type="email"
+                  required
+                  placeholder="your@email.com"
+                  value={contactEmail}
+                  onChange={(e) => setContactEmail(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-white/[0.04] bg-obsidian-950 text-xs text-white placeholder:text-foreground/35 focus:outline-none focus:border-accent-primary/50 transition-all font-sans"
+                />
+                <textarea
+                  required
+                  rows={3}
+                  placeholder="Your question or message..."
+                  value={contactMsg}
+                  onChange={(e) => setContactMsg(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-white/[0.04] bg-obsidian-950 text-xs text-white placeholder:text-foreground/35 focus:outline-none focus:border-accent-primary/50 transition-all resize-none font-sans"
+                />
+                <motion.button
+                  type="submit"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full py-2.5 rounded-lg bg-accent-primary/10 border border-accent-primary/20 text-accent-primary text-xs font-semibold hover:bg-accent-primary hover:text-black transition-all cursor-pointer flex items-center justify-center gap-2 group"
+                >
+                  <Send className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+                  Send Message
+                </motion.button>
+              </form>
+            )}
+          </div>
+        </div>
+      </motion.div>
     </section>
   );
 }

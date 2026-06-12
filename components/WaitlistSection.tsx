@@ -122,7 +122,7 @@ export default function WaitlistSection() {
 
   const triggerMockShare = () => {
     const url = getReferralUrl();
-    const text = `Join the Founding Waitlist for TradeX — AI-assisted behavioral intelligence for modern market participants! Get priority queue status using my link:`;
+    const text = `Join the Founding Waitlist for TradeXai — AI-assisted behavioral intelligence for modern market participants! Get priority queue status using my link:`;
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
     window.open(twitterUrl, "_blank");
     analytics.trackCtaClick("share_twitter_referral", "waitlist_success");
@@ -131,12 +131,12 @@ export default function WaitlistSection() {
   return (
     <section
       id="waitlist"
-      className="py-24 max-w-5xl mx-auto px-4 md:px-8 relative overflow-hidden"
+      className="py-24 max-w-5xl mx-auto px-3 md:px-5 relative overflow-hidden"
     >
       {/* Background visual glows */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-emerald-accent/[0.02] rounded-full blur-[160px] pointer-events-none -z-10 animate-pulse-slow" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-accent-primary/[0.02] rounded-full blur-[160px] pointer-events-none -z-10 animate-pulse-slow" />
 
-      <div className="w-full glass-card rounded-3xl border-emerald-accent/20 p-8 md:p-12 relative overflow-hidden">
+      <div className="w-full glass-card rounded-3xl border-accent-primary/20 p-8 md:p-12 relative overflow-hidden">
         {/* Fine background tech grid in the card */}
         <div className="absolute inset-0 bg-dot-grid-fine opacity-30 pointer-events-none" />
 
@@ -152,10 +152,10 @@ export default function WaitlistSection() {
             >
               {/* Form Header */}
               <div className="max-w-2xl mx-auto text-center space-y-4 mb-10">
-                <span className="font-technical text-[10px] font-semibold text-emerald-accent tracking-widest uppercase bg-emerald-accent/5 border border-emerald-accent/15 px-3 py-1 rounded-full">
-                  [APPLICATION_QUEUE: LIVE]
+                <span className="text-[10px] font-semibold text-accent-primary tracking-widest uppercase bg-accent-primary/5 border border-accent-primary/15 px-3 py-1 rounded-full font-ui">
+                  Early Access · Now Open
                 </span>
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground font-display">
                   Join the Founding Waitlist
                 </h2>
                 <p className="text-sm md:text-base text-foreground/60 leading-relaxed font-sans">
@@ -165,15 +165,15 @@ export default function WaitlistSection() {
 
               {/* Error Callout */}
               {submitError && (
-                <div className="mb-6 p-4 rounded-xl border border-red-500/20 bg-red-500/5 text-xs text-red-400 font-technical text-center">
-                  [SYSTEM_ERROR] {submitError}
+                <div className="mb-6 p-4 rounded-xl border border-red-500/20 bg-red-500/5 text-xs text-red-400 font-sans text-center">
+                  {submitError}
                 </div>
               )}
 
               {/* Referred Indicator */}
               {watch("referredBy") && (
-                <div className="mb-6 p-3 rounded-lg border border-emerald-accent/25 bg-emerald-accent/5 text-[11px] font-technical text-emerald-accent text-center">
-                  ✓ INVITE CODE DETECTED: {watch("referredBy")} (Priority position boost active)
+                <div className="mb-6 p-3 rounded-lg border border-accent-primary/25 bg-accent-primary/5 text-[11px] font-sans text-accent-primary text-center">
+                  ✓ Invite code applied: {watch("referredBy")} — Priority position boost active
                 </div>
               )}
 
@@ -181,15 +181,15 @@ export default function WaitlistSection() {
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-3xl mx-auto text-left">
                 {/* 1. Email Address */}
                 <div className="flex flex-col space-y-2">
-                  <label htmlFor="email" className="text-xs font-semibold text-foreground/80 font-technical tracking-wider uppercase">
-                    01 // EMAIL ADDRESS *
+                  <label htmlFor="email" className="text-xs font-semibold text-foreground/80 tracking-wide uppercase font-ui">
+                    Email Address *
                   </label>
                   <input
                     id="email"
                     type="email"
                     placeholder="name@institution.com"
                     {...register("email")}
-                    className={`w-full px-5 py-3.5 rounded-xl border font-sans text-sm text-foreground placeholder:text-foreground/35 focus:outline-none transition-all duration-300 ${errors.email ? "border-red-500/50 bg-red-500/5 focus:border-red-500" : "border-glass-border-strong bg-[var(--input-bg)] focus:border-emerald-accent"}`}
+                    className={`w-full px-5 py-3.5 rounded-xl border font-sans text-sm text-foreground placeholder:text-foreground/35 focus:outline-none transition-all duration-300 ${errors.email ? "border-red-500/50 bg-red-500/5 focus:border-red-500" : "border-white/[0.08] bg-obsidian-900 focus:border-accent-primary"}`}
                     style={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
                   />
                   {errors.email && (
@@ -201,8 +201,8 @@ export default function WaitlistSection() {
 
                 {/* 2. Experience Level */}
                 <div className="flex flex-col space-y-2">
-                  <label className="text-xs font-semibold text-foreground/80 font-technical tracking-wider uppercase">
-                    02 // TRADING EXPERIENCE LEVEL *
+                  <label className="text-xs font-semibold text-foreground/80 tracking-wide uppercase font-ui">
+                    Trading Experience Level *
                   </label>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     {[
@@ -213,12 +213,14 @@ export default function WaitlistSection() {
                     ].map((level) => {
                       const isChecked = selectedExperience === level.value;
                       return (
-                        <label
+                        <motion.label
                           key={level.value}
+                          whileHover={{ scale: 1.02, translateY: -2 }}
+                          whileTap={{ scale: 0.98 }}
                           className={`relative p-4 rounded-xl border text-center flex flex-col justify-center items-center cursor-pointer transition-all duration-300 ${
                             isChecked
-                              ? "bg-emerald-accent/10 border-emerald-accent text-foreground shadow-[0_0_15px_rgba(0,191,165,0.08)]"
-                              : "bg-[var(--bg-elevated)] border-glass-border-strong text-foreground/60 hover:border-emerald-accent/40 hover:bg-[var(--bg-overlay)]"
+                              ? "bg-accent-primary/10 border-accent-primary text-foreground shadow-[0_0_15px_rgba(37,99,235,0.08)]"
+                              : "bg-[var(--bg-elevated)] border-white/[0.08] text-foreground/60 hover:border-accent-primary/40 hover:bg-[var(--bg-overlay)]"
                           }`}
                         >
                           <input
@@ -229,7 +231,7 @@ export default function WaitlistSection() {
                           />
                           <span className="text-sm font-semibold tracking-tight">{level.label}</span>
                           <span className="text-[10px] font-technical text-foreground/45 mt-0.5">{level.desc}</span>
-                        </label>
+                        </motion.label>
                       );
                     })}
                   </div>
@@ -242,15 +244,15 @@ export default function WaitlistSection() {
 
                 {/* 3. Challenge */}
                 <div className="flex flex-col space-y-2">
-                  <label htmlFor="challenge" className="text-xs font-semibold text-foreground/80 font-technical tracking-wider uppercase">
-                    03 // WHAT IS YOUR BIGGEST COGNITIVE OR MARKET DECISION CHALLENGE? *
+                  <label htmlFor="challenge" className="text-xs font-semibold text-foreground/80 tracking-wide uppercase font-ui">
+                    Biggest Trading Decision Challenge *
                   </label>
                   <textarea
                     id="challenge"
                     rows={3}
                     placeholder="e.g. Overtrading after a loss, closing winners too early out of fear, or filters failing to block signal noise."
                     {...register("challenge")}
-                    className={`w-full px-5 py-3.5 rounded-xl border font-sans text-sm text-foreground placeholder:text-foreground/35 focus:outline-none transition-all duration-300 resize-none ${errors.challenge ? "border-red-500/50 bg-red-500/5 focus:border-red-500" : "border-glass-border-strong bg-[var(--input-bg)] focus:border-emerald-accent"}`}
+                    className={`w-full px-5 py-3.5 rounded-xl border font-sans text-sm text-foreground placeholder:text-foreground/35 focus:outline-none transition-all duration-300 resize-none ${errors.challenge ? "border-red-500/50 bg-red-500/5 focus:border-red-500" : "border-white/[0.08] bg-obsidian-900 focus:border-accent-primary"}`}
                     style={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
                   />
                   {errors.challenge && (
@@ -262,15 +264,15 @@ export default function WaitlistSection() {
 
                 {/* 4. Current Tools */}
                 <div className="flex flex-col space-y-2">
-                  <label htmlFor="tools" className="text-xs font-semibold text-foreground/80 font-technical tracking-wider uppercase">
-                    04 // WHICH TRADING TOOLS OR PLATFORMS DO YOU CURRENTLY USE? *
+                  <label htmlFor="tools" className="text-xs font-semibold text-foreground/80 tracking-wide uppercase font-ui">
+                    Current Trading Tools & Platforms *
                   </label>
                   <input
                     id="tools"
                     type="text"
                     placeholder="e.g. TradingView, Excel, Python scripts, Terminal, Notion"
                     {...register("tools")}
-                    className={`w-full px-5 py-3.5 rounded-xl border font-sans text-sm text-foreground placeholder:text-foreground/35 focus:outline-none transition-all duration-300 ${errors.tools ? "border-red-500/50 bg-red-500/5 focus:border-red-500" : "border-glass-border-strong bg-[var(--input-bg)] focus:border-emerald-accent"}`}
+                    className={`w-full px-5 py-3.5 rounded-xl border font-sans text-sm text-foreground placeholder:text-foreground/35 focus:outline-none transition-all duration-300 ${errors.tools ? "border-red-500/50 bg-red-500/5 focus:border-red-500" : "border-white/[0.08] bg-obsidian-900 focus:border-accent-primary"}`}
                     style={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
                   />
                   {errors.tools && (
@@ -282,15 +284,15 @@ export default function WaitlistSection() {
 
                 {/* 5. Expectation */}
                 <div className="flex flex-col space-y-2">
-                  <label htmlFor="expectation" className="text-xs font-semibold text-foreground/80 font-technical tracking-wider uppercase">
-                    05 // WHAT WOULD MAKE TRADEX EXTREMELY VALUABLE TO YOU? *
+                  <label htmlFor="expectation" className="text-xs font-semibold text-foreground/80 tracking-wide uppercase font-ui">
+                    What Would Make TradeXai Extremely Valuable To You? *
                   </label>
                   <textarea
                     id="expectation"
                     rows={3}
                     placeholder="e.g. A structured journal that categorizes emotional triggers, or a workspace to run rules audit checks before taking size."
                     {...register("expectation")}
-                    className={`w-full px-5 py-3.5 rounded-xl border font-sans text-sm text-foreground placeholder:text-foreground/35 focus:outline-none transition-all duration-300 resize-none ${errors.expectation ? "border-red-500/50 bg-red-500/5 focus:border-red-500" : "border-glass-border-strong bg-[var(--input-bg)] focus:border-emerald-accent"}`}
+                    className={`w-full px-5 py-3.5 rounded-xl border font-sans text-sm text-foreground placeholder:text-foreground/35 focus:outline-none transition-all duration-300 resize-none ${errors.expectation ? "border-red-500/50 bg-red-500/5 focus:border-red-500" : "border-white/[0.08] bg-obsidian-900 focus:border-accent-primary"}`}
                     style={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
                   />
                   {errors.expectation && (
@@ -306,7 +308,7 @@ export default function WaitlistSection() {
                     id="joinNewsletter"
                     type="checkbox"
                     {...register("joinNewsletter")}
-                    className="w-4 h-4 rounded accent-emerald-accent bg-[var(--bg-elevated)] border-glass-border-strong cursor-pointer focus:ring-0 focus:ring-offset-0"
+                    className="w-4 h-4 rounded accent-accent-primary bg-[var(--bg-elevated)] border-white/[0.08] cursor-pointer focus:ring-0 focus:ring-offset-0"
                   />
                   <label htmlFor="joinNewsletter" className="text-xs text-foreground/60 select-none cursor-pointer">
                     Join our monthly builder newsletter (Follow the build notes & insights).
@@ -315,10 +317,13 @@ export default function WaitlistSection() {
 
                 {/* Submit button */}
                 <div className="pt-4 max-w-xs">
-                  <button
+                  <motion.button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-4 px-6 rounded-full bg-emerald-accent text-black font-semibold text-sm hover:bg-emerald-accent/85 hover:shadow-[0_0_20px_rgba(0,245,196,0.25)] transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    whileHover={{ scale: 1.03, boxShadow: "0 0 24px rgba(37,99,235,0.4)" }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                    className="w-full py-4 px-6 rounded-full bg-accent-primary text-white font-semibold text-sm hover:bg-accent-primary/85 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? (
                       <span className="flex items-center space-x-2 font-technical text-xs tracking-widest uppercase">
@@ -331,7 +336,7 @@ export default function WaitlistSection() {
                         <ArrowRight className="w-4 h-4" />
                       </>
                     )}
-                  </button>
+                  </motion.button>
                 </div>
               </form>
             </motion.div>
@@ -346,30 +351,32 @@ export default function WaitlistSection() {
               className="max-w-2xl mx-auto text-center py-6"
             >
               {/* Success Badge */}
-              <div className="w-16 h-16 rounded-2xl bg-emerald-accent/10 border border-emerald-accent/30 flex items-center justify-center text-emerald-accent mx-auto mb-6 shadow-[0_0_25px_rgba(0,245,196,0.1)]">
+              <div className="w-16 h-16 rounded-2xl bg-accent-primary/10 border border-accent-primary/30 flex items-center justify-center text-accent-primary mx-auto mb-6 shadow-[0_0_25px_rgba(37,99,235,0.1)]">
                 <Award className="w-8 h-8" />
               </div>
 
-              <h2 className="text-3xl font-bold tracking-tight text-foreground mb-2">
+              <h2 className="text-3xl font-bold tracking-tight text-foreground mb-2 font-display">
                 Welcome to the founding queue.
               </h2>
-              <p className="text-xs font-technical text-emerald-accent uppercase tracking-widest mb-6">
-                [QUEUE_STATUS: VERIFIED // ID: {registeredUser.referralCode}]
+              <p className="text-xs font-semibold text-accent-primary uppercase tracking-widest mb-6 font-ui">
+                Application Received · ID: {registeredUser.referralCode}
               </p>
               
-              <div className="bg-[var(--bg-elevated)] border border-glass-border-strong rounded-2xl p-6 mb-8 text-left space-y-4">
+              <div className="bg-[var(--bg-elevated)] border border-white/[0.08] rounded-2xl p-6 mb-8 text-left space-y-4">
                 <p className="text-sm text-foreground/80 leading-relaxed font-sans">
                    We have queued your application details. You are registered as <span className="text-foreground font-semibold">{registeredUser.email}</span>. To fast-track your approval status, share your unique referral link:
                 </p>
 
                 {/* Link Copier Widget */}
-                <div className="flex items-center space-x-2 bg-[var(--bg-surface)] rounded-xl p-1.5 border border-glass-border-strong">
+                <div className="flex items-center space-x-2 bg-[var(--bg-surface)] rounded-xl p-1.5 border border-white/[0.08]">
                   <div className="flex-1 px-3 text-xs font-technical text-foreground/60 overflow-x-auto whitespace-nowrap select-all scrollbar-none py-2">
                     {getReferralUrl()}
                   </div>
-                  <button
+                  <motion.button
                     onClick={copyToClipboard}
-                    className="p-3.5 rounded-lg bg-emerald-accent/10 border border-emerald-accent/20 text-emerald-accent hover:bg-emerald-accent hover:text-black transition-all cursor-pointer flex items-center gap-1.5 font-semibold text-xs shrink-0"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="p-3.5 rounded-lg bg-accent-primary/10 border border-accent-primary/20 text-accent-primary hover:bg-accent-primary hover:text-black transition-all cursor-pointer flex items-center gap-1.5 font-semibold text-xs shrink-0"
                   >
                     {copied ? (
                       <>
@@ -382,17 +389,19 @@ export default function WaitlistSection() {
                         <span>Copy Link</span>
                       </>
                     )}
-                  </button>
+                  </motion.button>
                 </div>
 
                 <div className="pt-2 flex flex-wrap gap-3">
-                  <button
+                  <motion.button
                     onClick={triggerMockShare}
-                    className="flex-1 min-w-[140px] py-3 px-4 rounded-xl border border-glass-border-strong hover:border-emerald-accent/40 bg-[var(--bg-elevated)] text-foreground/80 hover:text-foreground transition-all text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer"
+                    whileHover={{ scale: 1.015, borderColor: "rgba(37,99,235,0.4)" }}
+                    whileTap={{ scale: 0.985 }}
+                    className="flex-1 min-w-[140px] py-3 px-4 rounded-xl border border-white/[0.08] bg-[var(--bg-elevated)] text-foreground/80 hover:text-foreground transition-all text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer"
                   >
-                    <Share2 className="w-3.5 h-3.5 text-emerald-accent" />
+                    <Share2 className="w-3.5 h-3.5 text-accent-primary" />
                     <span>Share on X (Twitter)</span>
-                  </button>
+                  </motion.button>
                 </div>
               </div>
 
@@ -401,15 +410,15 @@ export default function WaitlistSection() {
                 <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider font-technical">
                   Fast-Track Milestones
                 </h3>
-                <div className="space-y-3 font-technical text-xs">
-                  <div className="flex items-center justify-between p-4 rounded-xl bg-emerald-accent/5 border border-emerald-accent/20 text-emerald-accent">
+                <div className="space-y-3 font-ui text-xs">
+                  <div className="flex items-center justify-between p-4 rounded-xl bg-accent-primary/5 border border-accent-primary/20 text-accent-primary">
                     <span className="flex items-center gap-2.5 font-semibold">
                       <Check className="w-4 h-4 shrink-0" /> Application Received
                     </span>
                     <span>✓ COMPLETE</span>
                   </div>
 
-                  <div className="flex items-center justify-between p-4 rounded-xl bg-[var(--bg-elevated)] border border-glass-border text-foreground/50">
+                  <div className="flex items-center justify-between p-4 rounded-xl bg-[var(--bg-elevated)] border border-white/[0.04] text-foreground/50">
                     <span className="flex items-center gap-2.5">
                       <Users className="w-4 h-4 shrink-0" /> Invite 1 Friend
                     </span>
@@ -418,7 +427,7 @@ export default function WaitlistSection() {
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-between p-4 rounded-xl bg-[var(--bg-elevated)] border border-glass-border text-foreground/50">
+                  <div className="flex items-center justify-between p-4 rounded-xl bg-[var(--bg-elevated)] border border-white/[0.04] text-foreground/50">
                     <span className="flex items-center gap-2.5">
                       <Shield className="w-4 h-4 shrink-0 animate-pulse-slow" /> Invite 3 Friends for Priority Access
                     </span>
@@ -429,8 +438,8 @@ export default function WaitlistSection() {
                 </div>
               </div>
 
-              <div className="pt-2 text-xs font-technical text-foreground/45 flex items-center justify-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-accent animate-ping" />
+              <div className="pt-2 text-xs text-foreground/45 flex items-center justify-center gap-2 font-sans">
+                <span className="w-1.5 h-1.5 rounded-full bg-accent-primary animate-ping" />
                 <span>Invite 3 people &rarr; priority batch queue bypass</span>
               </div>
             </motion.div>

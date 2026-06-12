@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { Users, Video, Globe2, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface MetricItem {
   id: string;
@@ -14,43 +15,36 @@ interface MetricItem {
 
 export default function LiveTraction() {
   const [metrics, setMetrics] = useState<MetricItem[]>([
-    { id: "waitlist", label: "Waitlist Members", target: 1248, current: 0, suffix: "+", icon: Users },
-    { id: "interviews", label: "Interviews Conducted", target: 52, current: 0, suffix: "", icon: Video },
-    { id: "community", label: "Community Members", target: 680, current: 0, suffix: "+", icon: Globe2 },
-    { id: "countries", label: "Countries Represented", target: 24, current: 0, suffix: "", icon: Sparkles },
+    { id: "waitlist",   label: "Waitlist Members",        target: 1248, current: 0, suffix: "+", icon: Users    },
+    { id: "interviews", label: "Interviews Conducted",     target: 52,   current: 0, suffix: "",  icon: Video    },
+    { id: "community",  label: "Community Members",        target: 680,  current: 0, suffix: "+", icon: Globe2   },
+    { id: "countries",  label: "Countries Represented",    target: 24,   current: 0, suffix: "",  icon: Sparkles },
   ]);
 
   const [hasAnimated, setHasAnimated] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Fetch real counts from Neon database API
   useEffect(() => {
     const fetchTractionData = async () => {
       try {
         const response = await fetch("/api/traction");
         if (!response.ok) throw new Error();
         const data = await response.json();
-        
         setMetrics((prev) =>
           prev.map((item) => {
             if (item.id === "waitlist" && data.waitlist) {
               return { ...item, target: data.waitlist };
             }
-            if (item.id === "feedback" && data.feedback) {
-              // Can link feedback count dynamically if needed
-            }
             return item;
           })
         );
       } catch (err) {
-        // Silently default to standard target baseline values if offline
+        // Silently default to baseline values
       }
     };
-
     fetchTractionData();
   }, []);
 
-  // Viewport intersection detector to trigger count animation once
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -62,78 +56,87 @@ export default function LiveTraction() {
       },
       { threshold: 0.15 }
     );
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => {
-      if (containerRef.current) {
-        observer.unobserve(containerRef.current);
-      }
-    };
+    if (containerRef.current) observer.observe(containerRef.current);
+    return () => { if (containerRef.current) observer.unobserve(containerRef.current); };
   }, [hasAnimated, metrics]);
 
   const triggerCountUp = () => {
-    const duration = 1500; // Count-up time in milliseconds
-    const frameRate = 1000 / 60; // 60 FPS
+    const duration = 1800;
+    const frameRate = 1000 / 60;
     const totalFrames = Math.round(duration / frameRate);
     let frame = 0;
-
     const counter = setInterval(() => {
       frame++;
-      
       setMetrics((prev) =>
         prev.map((item) => {
-          // Easing out quadratic function
           const progress = frame / totalFrames;
-          const easeProgress = progress * (2 - progress);
+          const easeProgress = 1 - Math.pow(1 - progress, 3); // cubic ease-out
           const currentCount = Math.round(item.target * easeProgress);
-
-          return {
-            ...item,
-            current: frame === totalFrames ? item.target : currentCount,
-          };
+          return { ...item, current: frame === totalFrames ? item.target : currentCount };
         })
       );
-
-      if (frame === totalFrames) {
-        clearInterval(counter);
-      }
+      if (frame === totalFrames) clearInterval(counter);
     }, frameRate);
   };
 
   return (
     <section
       ref={containerRef}
-      className="py-16 border-y border-emerald-border/40 bg-obsidian-800/20 max-w-7xl mx-auto px-4 md:px-8 relative overflow-hidden"
+      className="py-16 relative overflow-hidden"
     >
-      <div className="absolute inset-0 bg-dot-grid-fine opacity-20 pointer-events-none" />
+      {/* Glass background strip */}
+      <div className="absolute inset-0 glass-panel border-y border-white/[0.04] pointer-events-none" />
+      <div className="absolute inset-0 bg-dot-grid-fine opacity-15 pointer-events-none" />
 
-      {/* 4 Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-        {metrics.map((item) => {
-          const Icon = item.icon;
-          return (
-            <div key={item.id} className="flex flex-col items-center text-center space-y-2 group">
-              {/* Icon Accent */}
-              <div className="w-10 h-10 rounded-xl bg-emerald-accent/5 border border-emerald-border/30 flex items-center justify-center text-emerald-accent/80 group-hover:text-emerald-accent transition-colors duration-300">
-                <Icon className="w-4.5 h-4.5" />
-              </div>
+      {/* Accent blobs */}
+      <div className="absolute left-1/4 top-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-accent-primary/[0.025] rounded-full blur-[80px] pointer-events-none" />
 
-              {/* Number Counter */}
-              <div className="text-3xl md:text-4xl font-extrabold text-white font-technical tracking-tight flex items-center">
-                <span>{item.current.toLocaleString()}</span>
-                <span className="text-emerald-accent">{item.suffix}</span>
-              </div>
+      <div className="relative max-w-7xl mx-auto px-3 md:px-5">
+        {/* 4 Stats Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+          {metrics.map((item, idx) => {
+            const Icon = item.icon;
+            return (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.5, delay: idx * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                className="flex flex-col items-center text-center space-y-3 group cursor-default"
+              >
+                {/* Icon Accent */}
+                <motion.div
+                  whileHover={{ scale: 1.12, backgroundColor: "rgba(37,99,235,0.15)" }}
+                  transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                  className="w-11 h-11 rounded-xl bg-accent-primary/5 border border-white/[0.07] flex items-center justify-center text-accent-primary/80 group-hover:text-accent-primary transition-colors duration-300"
+                >
+                  <Icon className="w-5 h-5" />
+                </motion.div>
 
-              {/* Label */}
-              <span className="text-xs text-foreground/50 font-sans tracking-wide">
-                {item.label}
-              </span>
-            </div>
-          );
-        })}
+                {/* Number Counter */}
+                <div className="text-3xl md:text-4xl font-extrabold text-white font-mono tracking-tight flex items-baseline gap-0.5">
+                  <motion.span
+                    key={item.current}
+                    initial={{ opacity: 0.7 }}
+                    animate={{ opacity: 1 }}
+                  >
+                    {item.current.toLocaleString()}
+                  </motion.span>
+                  <span className="text-accent-primary text-2xl">{item.suffix}</span>
+                </div>
+
+                {/* Label */}
+                <span className="text-xs text-foreground/50 font-sans tracking-wide">
+                  {item.label}
+                </span>
+
+                {/* Underline animation on hover */}
+                <div className="w-0 group-hover:w-8 h-[1px] bg-accent-primary/40 transition-all duration-500 rounded-full" />
+              </motion.div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

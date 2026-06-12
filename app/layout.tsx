@@ -4,34 +4,34 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
 const inter = Inter({
-  variable: "--font-sans",
+  variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
 });
 
 const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-technical",
+  variable: "--font-mono-raw",
   subsets: ["latin"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "TradeX | AI-Assisted Market Intelligence & Decision Workspaces",
+  title: "TradeXai",
   description: "Reduce information overload, audit emotional trading patterns, and build intentional execution workflows. Join the founding waitlist for early access.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   keywords: ["market intelligence", "trading software", "behavioral finance", "decision support", "algorithmic workflow", "professional traders"],
-  authors: [{ name: "TradeX Team" }],
+  authors: [{ name: "TradeXai Team" }],
   openGraph: {
-    title: "TradeX — Make Better Market Decisions.",
+    title: "TradeXai",
     description: "AI-assisted behavioral intelligence for modern traders and intentional market participants.",
     url: "https://tradex.ai",
-    siteName: "TradeX",
+    siteName: "TradeXai",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "TradeX Market Intelligence Workspace",
+        alt: "TradeXai Market Intelligence Workspace",
       },
     ],
     locale: "en_US",
@@ -39,13 +39,18 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "TradeX — Make Better Market Decisions.",
+    title: "TradeXai",
     description: "AI-assisted behavioral intelligence for modern market participants.",
     images: ["/og-image.png"],
   },
   robots: {
     index: true,
     follow: true,
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/logo.png",
   },
 };
 
@@ -57,17 +62,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} scroll-smooth`}
+      className={`${inter.variable} ${jetbrainsMono.variable} scroll-smooth dark`}
       suppressHydrationWarning
     >
       <body className="bg-background text-foreground bg-dot-grid min-h-screen antialiased flex flex-col">
-        {/* Inline theme init — runs synchronously before first paint to prevent flash */}
-        <script
-          id="theme-init"
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('tradex-theme');var d=(!t||t==='system')?window.matchMedia('(prefers-color-scheme:light)').matches?'light':'dark':t;document.documentElement.classList.add(d)}catch(e){document.documentElement.classList.add('dark')}})()`,
-          }}
-        />
         <ThemeProvider>
         
         {/* Dynamic Sweeping SVG Aurora Wave matching the provided image exactly */}
@@ -111,8 +109,8 @@ export default function RootLayout({
                 y2="1000"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop offset="0%" stopColor="#00bfa5" stopOpacity="0.28" />
-                <stop offset="45%" stopColor="#00a8cc" stopOpacity="0.18" />
+                <stop offset="0%" stopColor="#2563eb" stopOpacity="0.25" />
+                <stop offset="45%" stopColor="#1d4ed8" stopOpacity="0.15" />
                 <stop offset="80%" stopColor="transparent" stopOpacity="0" />
               </linearGradient>
               
@@ -124,8 +122,8 @@ export default function RootLayout({
                 y2="1000"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop offset="10%" stopColor="#0d9488" stopOpacity="0.22" />
-                <stop offset="55%" stopColor="#00bfa5" stopOpacity="0.16" />
+                <stop offset="10%" stopColor="#1e3a8a" stopOpacity="0.20" />
+                <stop offset="55%" stopColor="#2563eb" stopOpacity="0.15" />
                 <stop offset="90%" stopColor="transparent" stopOpacity="0" />
               </linearGradient>
             </defs>

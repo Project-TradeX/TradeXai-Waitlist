@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import WhyTradeX from "@/components/WhyTradeX";
+import WhyTradeXai from "@/components/WhyTradeXai";
 import ProductPreview from "@/components/ProductPreview";
 import WaitlistSection from "@/components/WaitlistSection";
 import CommunitySection from "@/components/CommunitySection";
@@ -8,6 +8,7 @@ import BuildInPublic from "@/components/BuildInPublic";
 import LiveTraction from "@/components/LiveTraction";
 import Newsletter from "@/components/Newsletter";
 import DecisionTerminal from "@/components/DecisionTerminal";
+import MainSiteBanner from "@/components/MainSiteBanner";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -18,12 +19,11 @@ export default function Home() {
 
       {/* Main content body */}
       <main className="flex-1 w-full flex flex-col items-stretch">
-        
         {/* Section 1: Hero Visual Node Mesh Flow */}
         <Hero />
 
-        {/* Section 2: Why TradeX core value props */}
-        <WhyTradeX />
+        {/* Section 2: Why TradeXai core value props */}
+        <WhyTradeXai />
 
         {/* Section 3: Premium Technical Product Preview Workspaces */}
         <ProductPreview />
@@ -47,6 +47,9 @@ export default function Home() {
         <DecisionTerminal />
 
       </main>
+
+      {/* Main Platform CTA Banner */}
+      <MainSiteBanner />
 
       {/* Minimal Footer */}
       <Footer />
