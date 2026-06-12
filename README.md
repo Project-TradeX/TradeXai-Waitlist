@@ -6,7 +6,7 @@ This repository contains a production-quality, high-converting pre-launch landin
 
 ---
 
-## 🛠 Technology Stack
+## Technology Stack
 
 - **Framework**: Next.js 16 (App Router)
 - **Language**: TypeScript
@@ -20,7 +20,7 @@ This repository contains a production-quality, high-converting pre-launch landin
 
 ---
 
-## 📁 Project Architecture
+## Project Architecture
 
 ```text
 ├── app/
@@ -57,46 +57,6 @@ This repository contains a production-quality, high-converting pre-launch landin
 
 ---
 
-## 💾 Database Schema (PostgreSQL)
-
-Set up your database tables in **Neon** by running the SQL scripts located in `db/schema.sql`:
-
-```sql
--- Founding Waitlist Registrations
-CREATE TABLE IF NOT EXISTS waitlist (
-    id SERIAL PRIMARY KEY,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    experience VARCHAR(50) NOT NULL,
-    challenge TEXT NOT NULL,
-    tools TEXT NOT NULL,
-    expectation TEXT NOT NULL,
-    source VARCHAR(100) DEFAULT 'web',
-    referral_code VARCHAR(50) UNIQUE NOT NULL,
-    referred_by VARCHAR(50),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
--- Drawer Feedback Submissions
-CREATE TABLE IF NOT EXISTS feedback (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(100),
-    email VARCHAR(255) NOT NULL,
-    type VARCHAR(50) NOT NULL,
-    message TEXT NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
--- Terminal Command Message Prompts
-CREATE TABLE IF NOT EXISTS terminal_messages (
-    id SERIAL PRIMARY KEY,
-    email VARCHAR(255) NOT NULL,
-    message TEXT NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-```
-
----
-
 ## ⚡ Robust Local Fallback Model
 
 If database environmental credentials (`DATABASE_URL`) are omitted during local operations or preview tests, **TradeX gracefully falls back to dynamic client-side `localStorage` caching and server-side in-memory mock repositories**.
@@ -104,33 +64,9 @@ If database environmental credentials (`DATABASE_URL`) are omitted during local 
 - Users can test waitlist submissions, referral milestones, feedback drawers, and command terminals immediately.
 - Persistent local caching keeps users logged into their custom referral dashboard even on page reloads.
 
----
+--- 
 
-## ⚙️ Local Development
-
-### 1. Scaffolding Setup
-Clone or load the files inside your project directory and execute:
-```bash
-npm install --legacy-peer-deps
-```
-
-### 2. Configure Environment Keys
-Copy `ENV.example` into a local file:
-```bash
-cp ENV.example .env.local
-```
-Fill in the parameters with your Neon PostgreSQL connection strings, Resend credentials, and PostHog keys.
-
-### 3. Spin Up Local Server
-Run the local dev engine:
-```bash
-npm run dev
-```
-Open [http://localhost:3000](http://localhost:3000) in your browser to preview.
-
----
-
-## 🚀 Production Deployment Checklist
+## Production Deployment Checklist
 
 ### Vercel Integration
 This codebase is ready for zero-overhead, highly optimized deployment on Vercel:
